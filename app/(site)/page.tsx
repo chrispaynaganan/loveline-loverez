@@ -49,6 +49,10 @@ export default async function Home() {
     getTestimonials(),
   ]);
   const featured = demos.filter((d) => d.featured).slice(0, 4);
+  // "Your voice for every story." → "your voice for" + underlined "every story."
+  const headline = p.tagline.trim().split(/\s+/);
+  const underlined = headline.slice(-2).join(" ");
+  const lead = headline.slice(0, -2).join(" ").replace(/^./, (c) => c.toLowerCase());
 
   return (
     <>
@@ -64,9 +68,9 @@ export default async function Home() {
               <TornPaper seed="hero-kraft" tone="kraft" depth={9} innerClassName="px-7 pt-12 pb-10 sm:px-10 sm:pt-14">
                 <p className="font-note text-3xl text-ink">Kumusta! I&apos;m {p.name.split(" ")[0]},</p>
                 <h1 className="mt-1 font-hand text-5xl leading-none text-ink sm:text-6xl xl:text-7xl">
-                  your voice for{" "}
+                  {lead}{" "}
                   <span className="relative inline-block">
-                    every story.
+                    {underlined}
                     <Underline className="absolute -bottom-3 left-0 w-full text-ink" delay={0.6} />
                   </span>
                 </h1>

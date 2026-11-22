@@ -6,7 +6,7 @@ const colors = {
   sage: "bg-sage/80 washi-stripes",
   butter: "bg-butter/75",
   plaid: "bg-cream/85 washi-grid",
-  black: "bg-ink/85",
+  black: "bg-night/85",
 } as const;
 
 export type TapeColor = keyof typeof colors;

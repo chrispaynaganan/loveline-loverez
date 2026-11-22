@@ -25,7 +25,7 @@ export function Polaroid({
   children?: ReactNode;
 }) {
   return (
-    <figure className={`relative bg-paper p-3 pb-2 shadow-lg ring-1 ring-ink/5 ${className}`}>
+    <figure className={`paper-ink relative bg-paper text-ink p-3 pb-2 shadow-lg ring-1 ring-ink/5 ${className}`}>
       {tape && <Tape color={tape} className="-top-3 left-1/2 -translate-x-1/2 -rotate-3" />}
       <div className={`relative overflow-hidden bg-ink/10 ${imageClassName}`}>
         <Image src={src} alt={alt} fill sizes={sizes} priority={priority} className="object-cover sepia-15 saturate-90" />

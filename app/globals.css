@@ -5,11 +5,14 @@
   --font-note: var(--font-caveat);
   --font-type: var(--font-courier);
   --font-sans: var(--font-courier);
+  --font-ui: var(--font-dm-sans);
 }
 
 @theme {
-  /* Paper & ink */
-  --color-desk: #efe6d6;
+  /* Paper & ink. The page itself is black scrapbook paper. */
+  --color-desk: #1c1917;
+  --color-night: #110f0e;
+  --color-chalk: #f2eadc;
   --color-paper: #faf6ee;
   --color-cream: #f4ecdc;
   --color-kraft: #c9a47c;
@@ -80,6 +83,19 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .28 0 0 0 0 .2 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
+/* Light speckle for the dark scrapbook page */
+@utility desk-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .95 0 0 0 0 .9 0 0 0 0 .82 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Ink flips to chalk on the dark page; anything made of paper switches it back. */
+@utility paper-ink {
+  --color-ink: #26211e;
+  --color-ink-soft: #5a514b;
+  --color-pencil: #8d8379;
+  color-scheme: light;
+}
+
 /* Kraft fibres */
 @utility kraft-fibres {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='k'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.03 .6' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 .4 0 0 0 0 .28 0 0 0 0 .15 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23k)'/%3E%3C/svg%3E");
@@ -87,6 +103,10 @@
 
 /* Notebook paper with a red margin line */
 @utility lined-paper {
+  --color-ink: #26211e;
+  --color-ink-soft: #5a514b;
+  --color-pencil: #8d8379;
+  color: var(--color-ink);
   background-color: var(--color-paper);
   background-image:
     linear-gradient(to right, transparent 2.6rem, var(--color-margin) 2.6rem, var(--color-margin) calc(2.6rem + 1px), transparent calc(2.6rem + 1px)),
@@ -96,6 +116,10 @@
 
 /* Graph paper */
 @utility grid-paper {
+  --color-ink: #26211e;
+  --color-ink-soft: #5a514b;
+  --color-pencil: #8d8379;
+  color: var(--color-ink);
   background-color: var(--color-paper);
   background-image:
     linear-gradient(var(--color-rule) 1px, transparent 1px),
@@ -155,7 +179,13 @@
   html {
     scroll-behavior: smooth;
   }
+  html {
+    color-scheme: dark;
+  }
   body {
+    --color-ink: var(--color-chalk);
+    --color-ink-soft: #cfc4b6;
+    --color-pencil: #a39788;
     background-color: var(--color-desk);
     color: var(--color-ink);
     font-family: var(--font-type), ui-monospace, monospace;

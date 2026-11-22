@@ -36,7 +36,7 @@ export async function Footer() {
 
   return (
     <footer className="relative mt-24 overflow-hidden">
-      <TornPaper seed="footer" tone="cream" edges={["top"]} depth={10} innerClassName="pt-14 pb-10">
+      <TornPaper seed="footer" tone="night" edges={["top"]} depth={10} innerClassName="pt-14 pb-10">
         <div className="mx-auto grid max-w-7xl gap-10 px-5 sm:px-8 lg:grid-cols-12">
           <div className="lg:col-span-3">
             <SmileySticker className="mb-3 size-16 -rotate-6" />

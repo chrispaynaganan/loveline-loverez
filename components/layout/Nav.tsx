@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { HandRule } from "@/components/scrap/HandRule";
 import { Squiggle } from "@/components/scrap/Doodles";
 import { TornPaper } from "@/components/scrap/TornPaper";
@@ -18,8 +18,9 @@ export const links = [
 
 export function Nav() {
   const path = usePathname();
-  const [open, setOpen] = useState(false);
-  useEffect(() => setOpen(false), [path]);
+  // remembers which page the menu was opened on, so it closes after navigating
+  const [openOn, setOpenOn] = useState<string | null>(null);
+  const open = openOn === path;
 
   return (
     <header className="relative z-40 mx-auto w-full max-w-7xl px-5 pt-5 sm:px-8">
@@ -47,13 +48,13 @@ export function Nav() {
         <div className="flex items-center gap-3">
           <Link
             href="/contact"
-            className="hidden -rotate-2 bg-ink px-4 py-2 font-type text-sm font-bold tracking-wider text-paper uppercase shadow-md transition hover:rotate-0 hover:bg-pink sm:inline-block"
+            className="hidden -rotate-2 bg-pink px-4 py-2 font-type text-sm font-bold tracking-wider text-night uppercase shadow-md transition hover:rotate-0 hover:bg-chalk sm:inline-block"
           >
             Book a session
           </Link>
           <button
             type="button"
-            onClick={() => setOpen((o) => !o)}
+            onClick={() => setOpenOn(open ? null : path)}
             aria-expanded={open}
             aria-controls="mobile-menu"
             className="grid size-11 place-items-center md:hidden"

@@ -49,7 +49,7 @@ const tones = {
   pink: "bg-pink-soft paper-grain",
   lined: "lined-paper",
   grid: "grid-paper",
-  ink: "bg-ink",
+  night: "bg-night desk-grain",
 } as const;
 
 export type PaperTone = keyof typeof tones;
@@ -88,7 +88,7 @@ export function TornPaper({
         />
       )}
       <div
-        className={`relative h-full ${tones[tone]} ${innerClassName}`}
+        className={`relative h-full ${tones[tone]} ${tone === "night" ? "" : "paper-ink text-ink"} ${innerClassName}`}
         style={{ clipPath: tornPolygon(seed, edges, depth + (fibre ? 3 : 0), fibre ? 2 : 0) }}
       >
         {children}

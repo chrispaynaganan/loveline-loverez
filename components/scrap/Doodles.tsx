@@ -225,7 +225,7 @@ export function InkSplat({ className = "" }: { className?: string }) {
 /** Pink smiley sticker wearing headphones. */
 export function SmileySticker({ className = "" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 100 100" className={className} aria-hidden>
+    <svg viewBox="0 0 100 100" className={`paper-ink ${className}`} aria-hidden>
       <circle cx="50" cy="52" r="40" className="fill-pink-soft" />
       <circle cx="50" cy="52" r="40" fill="none" stroke="white" strokeWidth="4" />
       <path d="M16 46 C 16 18, 84 18, 84 46" fill="none" className="stroke-ink" strokeWidth="3" strokeLinecap="round" />

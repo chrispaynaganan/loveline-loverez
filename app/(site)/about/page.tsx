@@ -28,7 +28,7 @@ export default async function AboutPage() {
           <Sparkle className="absolute -top-6 -right-4 size-12 text-pink" delay={0.8} />
           <div className="mt-10 flex flex-wrap justify-center gap-3">
             {p.stats.map((s, i) => (
-              <div key={s.label} className={`bg-paper px-4 py-3 text-center shadow-md ${i % 2 ? "rotate-2" : "-rotate-2"}`}>
+              <div key={s.label} className={`paper-ink bg-paper px-4 py-3 text-center text-ink shadow-md ${i % 2 ? "rotate-2" : "-rotate-2"}`}>
                 <span className="block font-hand text-3xl leading-none">{s.value}</span>
                 <span className="font-type text-xs">{s.label}</span>
               </div>
@@ -89,7 +89,7 @@ export default async function AboutPage() {
                 href={s.url}
                 target="_blank"
                 rel="noreferrer"
-                className={`inline-block bg-paper px-4 py-2 font-type text-sm font-bold shadow-md transition hover:bg-pink hover:text-paper ${i % 2 ? "rotate-2" : "-rotate-2"}`}
+                className={`paper-ink inline-block bg-paper px-4 py-2 font-type text-sm font-bold text-ink shadow-md transition hover:bg-pink ${i % 2 ? "rotate-2" : "-rotate-2"}`}
               >
                 {s.label}
               </Link>

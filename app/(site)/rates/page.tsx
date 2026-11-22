@@ -68,7 +68,7 @@ export default async function RatesPage() {
             <ArrowLoop className="h-24 w-20 -rotate-45 text-ink" delay={0.8} />
             <Link
               href="/contact"
-              className="rotate-1 bg-ink px-5 py-3 font-type text-sm font-bold tracking-widest text-paper uppercase shadow-md hover:-rotate-1 hover:bg-pink"
+              className="rotate-1 bg-pink px-5 py-3 font-type text-sm font-bold tracking-widest text-night uppercase shadow-md hover:-rotate-1 hover:bg-chalk"
             >
               Request a quote
             </Link>

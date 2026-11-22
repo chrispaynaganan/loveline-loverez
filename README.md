@@ -20,18 +20,45 @@ npm run build    # production build
 | `/reels`   | Video reels in film frames; landscape spots and portrait shorts   |
 | `/rates`   | Full voice rate card, what's included, the small print            |
 | `/about`   | Letter from Loveline, services, testimonials, socials             |
-| `/contact` | Booking form (opens the visitor's email app for now)              |
+| `/contact` | Booking form (saves to the Studio's Bookings inbox)               |
+| `/studio`  | Loveline's content dashboard (see below)                          |
 
-## Editing content (before the CMS)
+## Editing content: the Studio
 
-All content lives in **`content/data.ts`**. Pages only read it through `lib/content.ts`.
+Loveline edits everything at **`/studio`** (sign in with email and password):
 
-- **Add an audio demo:** put the `.mp3` in `public/audio/`, then set its
-  `source: { kind: "file", url: "/audio/commercial.mp3" }`.
-  A Google Drive file also works: `source: { kind: "drive", id: "FILE_ID" }` (opens in a pop-up).
-- **Add a video reel:** add an entry to `videoReels` with a poster image in `public/images/`.
-  Use `orientation: "portrait"` for TikTok / Reels / Shorts — they get their own "Short reels" row.
-- **Rates:** fill in `pricePhp` / `priceUsd`. Leaving them `null` shows "quote on request".
+| Studio page      | What it changes                                                         |
+| ---------------- | ----------------------------------------------------------------------- |
+| Demo reels       | Cassette demos: upload an MP3 (length fills in), or paste a Drive link  |
+| Video reels      | Ads and short reels: upload a video (shape, length and cover fill in), or paste a Drive / YouTube link |
+| Rate card        | Services and prices (empty price = "quote on request"), includes, small print |
+| About & profile  | Headline, intro, photo, numbers, checklist, About letter, services, links |
+| Kind words       | Testimonials                                                            |
+| Bookings         | Inquiries from the Contact page: reply, mark replied, archive           |
+
+Saving refreshes the public site straight away. Uploads go to Supabase Storage (50 MB per file on the free plan).
+
+### How it fits together
+
+- `lib/content.ts` reads Supabase with `"use cache"` + `cacheTag("content")`; the Studio's
+  `refreshSite` server action (`app/studio/actions.ts`) checks the editor and calls `updateTag("content")`.
+- If Supabase isn't configured or can't be reached, the site falls back to `content/data.ts`.
+- Security lives in Supabase (row level security): anyone can read published content and send a booking;
+  only emails in the `editors` table can change content, upload files or read bookings.
+- `vercel.json` runs `/api/keep-alive` daily so the free Supabase project isn't paused for inactivity.
+
+### Setting up Supabase (once)
+
+1. **SQL Editor:** run `supabase/0001_cms.sql`, then `supabase/0002_seed.sql` (both are safe to re-run).
+   The seed is generated from `content/data.ts` with `npm run seed`.
+2. **Editors:** the seed allows `lovelinesvo@gmail.com` and `mark.payns@gmail.com`. To change:
+   `insert into editors (email) values ('new@email.com');` / `delete from editors where email = '...';`
+3. **Authentication → Users → Add user** for each editor (tick *Auto confirm*).
+4. **Authentication → Sign In / Providers → Email:** turn off *Allow new users to sign up*.
+5. **Authentication → URL Configuration:** Site URL `https://www.lovelineloverez.com`; redirect URLs
+   `https://www.lovelineloverez.com/studio` and `http://localhost:3000/studio` (for password resets).
+6. Copy `.env.example` to `.env.local` and fill in the URL and publishable key; add the same two to
+   Vercel → Settings → Environment Variables, then redeploy.
 
 ## Scrapbook kit (`components/scrap/`)
 
@@ -41,9 +68,3 @@ All content lives in **`content/data.ts`**. Pages only read it through `lib/cont
 Doodles draw themselves in when their section scrolls into view, and stay still for
 people who prefer reduced motion.
 
-## Next: CMS with Supabase
-
-The site is ready for it: each type in `content/types.ts` becomes a table, and each function
-in `lib/content.ts` becomes a Supabase query. Planned for the dashboard:
-demo reels (upload audio), video reels (upload video + poster), rate card, profile/about,
-testimonials, and booking inquiries from the contact form.

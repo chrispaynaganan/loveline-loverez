@@ -2,38 +2,74 @@
 
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { studioClient, supabaseConfigured } from "@/lib/supabase";
 
 const field =
   "w-full border-b-2 border-ink/60 bg-transparent px-1 pt-1 pb-0.5 font-note text-2xl leading-8 placeholder:text-pencil focus:border-pink focus:outline-none";
 const label = "block font-type text-xs font-bold tracking-widest uppercase";
 
 /**
- * Booking form. For now it opens the visitor's email app with everything filled in.
- * Once Supabase is set up, it will save inquiries to Loveline's dashboard instead.
+ * Booking form. Saves the inquiry to Loveline's Studio inbox. If Supabase isn't
+ * set up (or can't be reached), it opens the visitor's email app instead.
  */
 export function ContactForm({ email, services }: { email: string; services: string[] }) {
   const params = useSearchParams();
-  const [sent, setSent] = useState(false);
+  const [state, setState] = useState<"idle" | "sending" | "sent" | "mailed">("idle");
+
+  async function submit(form: HTMLFormElement) {
+    const f = new FormData(form);
+    const get = (k: string) => String(f.get(k) ?? "").trim();
+    const inquiry = {
+      name: get("name"),
+      email: get("email"),
+      project_type: get("type") || null,
+      script_length: get("length") || null,
+      deadline: get("deadline") || null,
+      message: get("message"),
+    };
+    if (supabaseConfigured) {
+      setState("sending");
+      const { error } = await studioClient().from("inquiries").insert(inquiry);
+      if (!error) {
+        setState("sent");
+        form.reset();
+        return;
+      }
+      console.error("Inquiry not saved, falling back to email:", error.message);
+    }
+    const subject = `Voice-over booking: ${inquiry.project_type || "new project"}${inquiry.name ? ` from ${inquiry.name}` : ""}`;
+    const body = [
+      `Name: ${inquiry.name}`,
+      `Email: ${inquiry.email}`,
+      `Project type: ${inquiry.project_type ?? "-"}`,
+      `Script length: ${inquiry.script_length ?? "-"}`,
+      `Deadline: ${inquiry.deadline ?? "-"}`,
+      "",
+      inquiry.message,
+    ].join("\n");
+    window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    setState("mailed");
+  }
+
+  if (state === "sent")
+    return (
+      <div role="status" className="py-10 text-center">
+        <p className="font-hand text-5xl leading-tight">Got it, salamat!</p>
+        <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed">
+          Your project details are with me. I&apos;ll reply to your email with a quote and timeline, usually within a day or two.
+        </p>
+        <button type="button" onClick={() => setState("idle")} className="mt-6 border-b-2 border-ink font-type text-xs font-bold tracking-widest uppercase hover:border-pink hover:text-pink">
+          Send another
+        </button>
+      </div>
+    );
 
   return (
     <form
       className="space-y-7"
       onSubmit={(e) => {
         e.preventDefault();
-        const f = new FormData(e.currentTarget);
-        const get = (k: string) => String(f.get(k) ?? "").trim();
-        const subject = `Voice-over booking: ${get("type") || "new project"}${get("name") ? ` from ${get("name")}` : ""}`;
-        const body = [
-          `Name: ${get("name")}`,
-          `Email: ${get("email")}`,
-          `Project type: ${get("type")}`,
-          `Script length: ${get("length") || "-"}`,
-          `Deadline: ${get("deadline") || "-"}`,
-          "",
-          get("message"),
-        ].join("\n");
-        window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        setSent(true);
+        void submit(e.currentTarget);
       }}
     >
       <div className="grid gap-7 sm:grid-cols-2">
@@ -88,11 +124,12 @@ export function ContactForm({ email, services }: { email: string; services: stri
       <div className="flex flex-wrap items-center gap-5">
         <button
           type="submit"
-          className="-rotate-1 bg-ink px-6 py-3 font-type text-sm font-bold tracking-widest text-paper uppercase shadow-md transition hover:rotate-0 hover:bg-pink"
+          disabled={state === "sending"}
+          className="-rotate-1 disabled:opacity-60 bg-ink px-6 py-3 font-type text-sm font-bold tracking-widest text-paper uppercase shadow-md transition hover:rotate-0 hover:bg-pink"
         >
-          Send it over
+          {state === "sending" ? "Sending…" : "Send it over"}
         </button>
-        {sent && (
+        {state === "mailed" && (
           <p role="status" className="font-note text-2xl text-pink">
             Your email app should open now. If it doesn&apos;t, write to {email}.
           </p>

@@ -17,7 +17,7 @@ export function Label({
   };
   return (
     <span
-      className={`inline-block px-2 py-0.5 font-type text-xs font-bold tracking-widest uppercase shadow-sm ${tones[tone]} ${className}`}
+      className={`paper-ink inline-block px-2 py-0.5 font-type text-xs font-bold tracking-widest uppercase shadow-sm ${tones[tone]} ${className}`}
     >
       {children}
     </span>

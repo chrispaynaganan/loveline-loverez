@@ -60,7 +60,7 @@ export function MediaProvider({ children }: { children: ReactNode }) {
         ref={dialog}
         onClose={() => setMedia(null)}
         onClick={(e) => e.target === dialog.current && dialog.current?.close()}
-        className="m-auto w-full max-w-4xl overflow-visible bg-transparent p-4 backdrop:bg-ink/70 backdrop:backdrop-blur-sm"
+        className="m-auto w-full max-w-4xl overflow-visible bg-transparent p-4 backdrop:bg-night/80 backdrop:backdrop-blur-sm"
         aria-label={media?.title}
       >
         {media && (

@@ -9,7 +9,7 @@ export function ProjectNote() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   return (
-    <div className="relative rotate-2 bg-butter p-6 pt-8 shadow-lg paper-grain">
+    <div className="paper-ink relative rotate-2 bg-butter text-ink p-6 pt-8 shadow-lg paper-grain">
       <Tape color="plaid" className="-top-3 -left-4 w-16 -rotate-12" />
       <svg viewBox="0 0 24 60" className="absolute -top-6 right-6 h-14 w-6 text-ink-soft" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
         <path d="M8 44 V12 a4 4 0 0 1 8 0 V50 a6 6 0 0 1 -12 0 V18" strokeLinecap="round" />

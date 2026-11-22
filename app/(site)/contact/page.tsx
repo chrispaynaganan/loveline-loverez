@@ -39,7 +39,7 @@ export default async function ContactPage() {
         <aside className="relative space-y-12 lg:col-span-4 lg:pt-8">
           <div className="settle relative rotate-2" style={{ "--settle-delay": "0.15s" } as React.CSSProperties}>
             <SmileySticker className="absolute -top-8 -right-4 z-10 size-16 rotate-12" />
-            <div className="bg-butter p-6 shadow-lg paper-grain">
+            <div className="paper-ink bg-butter p-6 text-ink shadow-lg paper-grain">
               <p className="font-note text-2xl leading-tight">Rather just email?</p>
               <Link href={`mailto:${p.email}`} className="mt-1 block font-type text-sm font-bold break-all underline underline-offset-4 hover:text-pink">
                 {p.email}

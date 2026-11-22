@@ -1,4 +1,4 @@
-import type { DemoReel, Profile, RateCard, Testimonial, VideoReel } from "./types";
+import type { DemoReel, Profile, RateCard, Testimonial, VideoReel } from "./types.ts";
 
 // Everything on the site comes from here until the Supabase CMS is connected.
 // To add a demo: upload the .mp3 into /public/audio and set
