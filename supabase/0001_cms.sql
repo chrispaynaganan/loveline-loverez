@@ -135,6 +135,18 @@ create policy "visitors send" on public.inquiries for insert to anon, authentica
 create policy "editors manage" on public.inquiries for all to authenticated using (public.is_editor()) with check (public.is_editor());
 
 -- ---------------------------------------------------------------
+-- Table access for the website's key (newer projects don't grant it by default).
+-- The rules above still decide what each person can see or change.
+-- ---------------------------------------------------------------
+grant usage on schema public to anon, authenticated;
+grant select on public.site_settings, public.demo_reels, public.video_reels, public.rates, public.testimonials to anon, authenticated;
+grant insert, update, delete on public.site_settings, public.demo_reels, public.video_reels, public.rates, public.testimonials to authenticated;
+grant insert on public.inquiries to anon, authenticated;
+grant select, update, delete on public.inquiries to authenticated;
+grant select on public.editors to authenticated;
+grant execute on function public.is_editor() to anon, authenticated;
+
+-- ---------------------------------------------------------------
 -- File storage for audio, video and images (public to read, editors upload)
 -- ---------------------------------------------------------------
 insert into storage.buckets (id, name, public)

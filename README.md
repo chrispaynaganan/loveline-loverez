@@ -50,6 +50,7 @@ Saving refreshes the public site straight away. Uploads go to Supabase Storage (
 ### Setting up Supabase (once)
 
 1. **SQL Editor:** run `supabase/0001_cms.sql`, then `supabase/0002_seed.sql` (both are safe to re-run).
+   Projects set up with the earlier `0001_cms.sql` also need `supabase/0003_grants.sql` once.
    The seed is generated from `content/data.ts` with `npm run seed`.
 2. **Editors:** the seed allows `lovelinesvo@gmail.com` and `mark.payns@gmail.com`. To change:
    `insert into editors (email) values ('new@email.com');` / `delete from editors where email = '...';`
