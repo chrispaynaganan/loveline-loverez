@@ -36,6 +36,8 @@ Loveline edits everything at **`/studio`** (sign in with email and password):
 | Kind words       | Testimonials                                                            |
 | Bookings         | Inquiries from the Contact page: reply, mark replied, archive           |
 
+New bookings are saved to the Studio and emailed to Loveline through Resend (`lib/email.ts`, from `bookings@lovelineloverez.com`; replying answers the client). If the email fails, the booking is still saved.
+
 Saving refreshes the public site straight away. Uploads go to Supabase Storage (50 MB per file on the free plan).
 
 ### How it fits together
@@ -58,8 +60,9 @@ Saving refreshes the public site straight away. Uploads go to Supabase Storage (
 4. **Authentication → Sign In / Providers → Email:** turn off *Allow new users to sign up*.
 5. **Authentication → URL Configuration:** Site URL `https://www.lovelineloverez.com`; redirect URLs
    `https://www.lovelineloverez.com/studio` and `http://localhost:3000/studio` (for password resets).
-6. Copy `.env.example` to `.env.local` and fill in the URL and publishable key; add the same two to
-   Vercel → Settings → Environment Variables, then redeploy.
+6. Copy `.env.example` to `.env.local` and fill in the URL, publishable key and `RESEND_API_KEY`; add the same
+   to Vercel → Settings → Environment Variables, then redeploy.
+7. **Resend:** verify `lovelineloverez.com` in Loveline's Resend account (Domains) by adding its DNS records in GoDaddy.
 
 ## Scrapbook kit (`components/scrap/`)
 

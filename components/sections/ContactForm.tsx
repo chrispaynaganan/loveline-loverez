@@ -2,7 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { studioClient, supabaseConfigured } from "@/lib/supabase";
+import { submitBooking } from "@/app/(site)/contact/actions";
 
 const field =
   "w-full border-b-2 border-ink/60 bg-transparent px-1 pt-1 pb-0.5 font-note text-2xl leading-8 placeholder:text-pencil focus:border-pink focus:outline-none";
@@ -27,15 +27,12 @@ export function ContactForm({ email, services }: { email: string; services: stri
       deadline: get("deadline") || null,
       message: get("message"),
     };
-    if (supabaseConfigured) {
-      setState("sending");
-      const { error } = await studioClient().from("inquiries").insert(inquiry);
-      if (!error) {
-        setState("sent");
-        form.reset();
-        return;
-      }
-      console.error("Inquiry not saved, falling back to email:", error.message);
+    setState("sending");
+    const res = await submitBooking(f).catch(() => ({ ok: false as const }));
+    if (res.ok) {
+      setState("sent");
+      form.reset();
+      return;
     }
     const subject = `Voice-over booking: ${inquiry.project_type || "new project"}${inquiry.name ? ` from ${inquiry.name}` : ""}`;
     const body = [
@@ -72,6 +69,11 @@ export function ContactForm({ email, services }: { email: string; services: stri
         void submit(e.currentTarget);
       }}
     >
+      {/* left empty by people, filled in by spam bots */}
+      <div aria-hidden className="hidden">
+        <label htmlFor="website">Website</label>
+        <input id="website" name="website" tabIndex={-1} autoComplete="off" />
+      </div>
       <div className="grid gap-7 sm:grid-cols-2">
         <div>
           <label htmlFor="name" className={label}>Your name</label>
