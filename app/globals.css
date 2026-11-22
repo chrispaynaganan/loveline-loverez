@@ -1,0 +1,176 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-hand: var(--font-gochi);
+  --font-note: var(--font-caveat);
+  --font-type: var(--font-courier);
+  --font-sans: var(--font-courier);
+}
+
+@theme {
+  /* Paper & ink */
+  --color-desk: #efe6d6;
+  --color-paper: #faf6ee;
+  --color-cream: #f4ecdc;
+  --color-kraft: #c9a47c;
+  --color-kraft-dark: #a9835c;
+  --color-blush: #f3b5b5;
+  --color-butter: #f6e27f;
+  --color-sage: #bfc8ad;
+  --color-sky: #b9d3dc;
+  --color-ink: #26211e;
+  --color-ink-soft: #5a514b;
+  --color-pencil: #8d8379;
+  --color-rule: #b8cbe0;
+  --color-margin: #e7a2a2;
+
+  /* Loveline's brand pink */
+  --color-pink: #ef5f97;
+  --color-pink-soft: #f7a8c6;
+
+  --animate-draw: draw 1.4s ease-out both;
+  --animate-wiggle: wiggle 0.5s ease-in-out;
+  --animate-spin-slow: spin 6s linear infinite;
+  --animate-bob: bob 3s ease-in-out infinite;
+  --animate-pop: pop 0.35s ease-out both;
+
+  @keyframes draw {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @keyframes wiggle {
+    0%,
+    100% {
+      transform: rotate(0deg);
+    }
+    30% {
+      transform: rotate(-3deg);
+    }
+    60% {
+      transform: rotate(2deg);
+    }
+  }
+  @keyframes bob {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-6px);
+    }
+  }
+  @keyframes pop {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}
+
+/* Fine paper grain over the whole desk */
+@utility paper-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .28 0 0 0 0 .2 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Kraft fibres */
+@utility kraft-fibres {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='k'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.03 .6' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 .4 0 0 0 0 .28 0 0 0 0 .15 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23k)'/%3E%3C/svg%3E");
+}
+
+/* Notebook paper with a red margin line */
+@utility lined-paper {
+  background-color: var(--color-paper);
+  background-image:
+    linear-gradient(to right, transparent 2.6rem, var(--color-margin) 2.6rem, var(--color-margin) calc(2.6rem + 1px), transparent calc(2.6rem + 1px)),
+    repeating-linear-gradient(to bottom, transparent 0 calc(2rem - 1px), var(--color-rule) calc(2rem - 1px) 2rem);
+  background-position: 0 0.4rem;
+}
+
+/* Graph paper */
+@utility grid-paper {
+  background-color: var(--color-paper);
+  background-image:
+    linear-gradient(var(--color-rule) 1px, transparent 1px),
+    linear-gradient(to right, var(--color-rule) 1px, transparent 1px);
+  background-size: 1.25rem 1.25rem;
+}
+
+/* Dotted leader between a service and its price */
+@utility leader {
+  background-image: radial-gradient(circle, var(--color-pencil) 1px, transparent 1.5px);
+  background-size: 0.5rem 0.5rem;
+  background-position: 0 70%;
+  background-repeat: repeat-x;
+}
+
+/* Hand-drawn strokes draw themselves in, and paper pieces settle onto the page,
+   once their section scrolls into view (see components/scrap/Reveal.tsx). */
+.ink-draw {
+  stroke-dasharray: 1;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .ink-draw {
+    stroke-dashoffset: 1;
+  }
+  [data-inview] .ink-draw {
+    animation: draw 1.3s cubic-bezier(0.6, 0, 0.3, 1) var(--draw-delay, 0.2s) both;
+  }
+  .settle {
+    opacity: 0;
+    transform: translateY(14px) rotate(var(--settle-rot, -2deg)) scale(0.98);
+  }
+  [data-inview] .settle {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 0.5s ease-out var(--settle-delay, 0s),
+      transform 0.7s cubic-bezier(0.2, 0.9, 0.3, 1.25) var(--settle-delay, 0s);
+  }
+}
+
+/* Washi tape stripes */
+@utility washi-stripes {
+  background-image: repeating-linear-gradient(-45deg, rgb(255 255 255 / 0.35) 0 0.35rem, transparent 0.35rem 0.7rem);
+}
+@utility washi-dots {
+  background-image: radial-gradient(rgb(255 255 255 / 0.55) 1.5px, transparent 2px);
+  background-size: 0.6rem 0.6rem;
+}
+@utility washi-grid {
+  background-image:
+    linear-gradient(rgb(38 33 30 / 0.18) 1px, transparent 1px),
+    linear-gradient(to right, rgb(38 33 30 / 0.18) 1px, transparent 1px);
+  background-size: 0.4rem 0.4rem;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: var(--color-desk);
+    color: var(--color-ink);
+    font-family: var(--font-type), ui-monospace, monospace;
+  }
+  ::selection {
+    background: var(--color-pink-soft);
+  }
+  :focus-visible {
+    outline: 2px dashed var(--color-pink);
+    outline-offset: 4px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
